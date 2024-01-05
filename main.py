@@ -6,7 +6,7 @@ def main():
     check_python_version()
     arguments = check_arguments()
 
-    if arguments is None:
+    if not arguments:
         return
     #print(arguments)
     syncroniser(arguments)

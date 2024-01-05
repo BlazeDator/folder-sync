@@ -1,16 +1,16 @@
 import sys, os
 
 def check_arguments() -> dict:
-    arguments = {}
+    arguments: dict[str, str]
 
     if not check_arg_count():
-        return None
+        return {}
     if not check_folder_paths():
-        return None
+        return {}
     if not check_sync_time():
-        return None
+        return {}
     if not check_log_file_path():
-        return None
+        return {}
     arguments = args_to_dict()
     return arguments
 
@@ -61,7 +61,7 @@ def args_to_dict() -> dict:
     arguments = {}
     arguments["source"] = os.path.abspath(sys.argv[1])
     arguments["replica"] = os.path.abspath(sys.argv[2])
-    arguments["sync"] = int(sys.argv[3])
+    arguments["sync"] = sys.argv[3]
     arguments["log_dir"] = os.path.abspath(os.path.split(sys.argv[4])[0])
     arguments["log_file"] = os.path.split(sys.argv[4])[1]
     return arguments
