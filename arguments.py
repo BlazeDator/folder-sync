@@ -27,12 +27,12 @@ def check_arg_count() -> bool:
 
 def check_folder_paths() -> bool:
     if not os.path.isdir(sys.argv[1]):
-        print("Error: Invalid source path")
+        print("Error: Invalid source directory")
         return False
     elif not os.path.isdir(sys.argv[2]):
-        print("Error: Invalid replica path")
+        print("Error: Invalid replica directory")
         return False
-    elif sys.argv[1] == sys.argv[2]:
+    elif os.path.abspath(sys.argv[1]) == os.path.abspath(sys.argv[2]):
         print("Error: Source and replica directory are the same")
         return False
     return True
@@ -59,9 +59,9 @@ def check_sync_time() -> bool:
 
 def args_to_dict() -> dict:
     arguments = {}
-    arguments["source"] = sys.argv[1]
-    arguments["replica"] = sys.argv[2]
+    arguments["source"] = os.path.abspath(sys.argv[1])
+    arguments["replica"] = os.path.abspath(sys.argv[2])
     arguments["sync"] = int(sys.argv[3])
-    arguments["log_dir"] = os.path.split(sys.argv[4])[0]
+    arguments["log_dir"] = os.path.abspath(os.path.split(sys.argv[4])[0])
     arguments["log_file"] = os.path.split(sys.argv[4])[1]
     return arguments
