@@ -1,6 +1,6 @@
 from helpers import check_python_version
 from arguments import check_arguments
-from sync import files_sync
+from sync import syncroniser
 
 def main():
     check_python_version()
@@ -8,8 +8,8 @@ def main():
 
     if arguments is None:
         return
-    print(arguments)
-    files_sync(arguments)
+    #print(arguments)
+    syncroniser(arguments)
 
 if __name__ == "__main__":
     main()
