@@ -48,7 +48,7 @@ def check_log_file_path() -> bool:
         print("Error: Please specify a example.csv file")
         return False
     if not os.path.isfile(sys.argv[4]):
-        print("Log: File not found, a new one will be created")
+        print("Log: Log file not found, a new one will be created")
     return True
 
 def check_sync_time() -> bool:
