@@ -9,7 +9,7 @@ def main():
     if not arguments:
         return
     #print(arguments)
-    syncroniser(arguments)
+    syncroniser(arguments["source"], arguments)
 
 if __name__ == "__main__":
     main()
