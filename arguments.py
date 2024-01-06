@@ -55,8 +55,13 @@ def check_log_file_path() -> bool:
     file = os.path.split(sys.argv[4])[1]
 
     if not os.path.isdir(folder):
-        print("Error: Log file directory not found")
-        return False
+        path = os.path.split(os.path.abspath(folder))[0]
+        if not os.path.exists(folder) and os.path.isdir(path):
+            print("Log: Creating Log directory")
+            os.mkdir(folder)
+        else:
+            print("Error: Invalid Log directory")
+            return False
     elif not file.endswith(".csv") or len(file.split(".csv")[0]) < 1:
         print("Error: Please specify a example.csv file")
         return False
