@@ -1,26 +1,46 @@
-import sys, os
+import os, shutil, hashlib
 
-# When using the os walk, I can go topdown or bottomup by using the topdown flag
+# TODO: Remove files not present on source from replica
+# TODO: Separate explore_path function into smaller bits, improve readability
+# TODO: Write operations to log file
 
-#for roots, dirs, files in os.walk(arguments["source"]):
-    #print(roots)
-    #print(dirs)
-    #print(files)
-    #print("\n------------------------")
+def syncroniser(arguments: dict[str, str]):
+    explore_path(arguments["source"], arguments)
 
-# New approach ? call a function on the main dir, for every dir in the listdir call another
-# time the function on that dir, after the recursion going through every dir, do the file operations
-# maybe create the dirs before going into the next dir
-
-def syncroniser(arguments: dict):
-    explore_path(arguments["source"])
-
-def explore_path(path: str):
+def explore_path(path: str, arguments: dict[str, str]):
     files = os.listdir(path)
+
     for file in files:
+        filesha: str = ""
+        replicasha: str = ""
         file = os.path.join(path, file)
+        replica = file.replace(arguments["source"], arguments["replica"])
+
         if os.path.isdir(file):
-            print("dir: ", file)
-            explore_path(os.path.join(path, file))
+            if not os.path.exists(replica):
+                print("Log: Creating dir ", replica)
+                os.mkdir(replica)
+            elif os.path.isfile(replica):
+                print("Log: Removing file ", replica)
+                os.remove(replica)
+                print("Log: Creating dir")
+                os.mkdir(replica)
+            explore_path(os.path.join(path, file), arguments)
         elif os.path.isfile(file):
-            print("file:", file)
+            with open(file, "rb") as f:
+                filesha = hashlib.file_digest(f, "sha256").hexdigest()
+            if os.path.isfile(replica):
+                with open(replica, "rb") as f:
+                    replicasha = hashlib.file_digest(f, "sha256").hexdigest()
+            if not os.path.exists(replica):
+                print("Log: Creating file ", replica)
+                shutil.copyfile(file, replica)
+            elif os.path.isfile(replica) and filesha != replicasha:
+                print("Log: Updating file ", replica)
+                shutil.copyfile(file, replica)
+            elif os.path.isdir(replica):
+                print("Log: Removing dir ", replica)
+                os.rmdir(replica)
+                print("Log: Creating file ", replica)
+                shutil.copyfile(file, replica)
+        
