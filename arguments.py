@@ -1,6 +1,6 @@
 import sys, os
 
-def check_arguments() -> dict:
+def check_arguments() -> dict[str, str]:
     arguments: dict[str, str]
 
     if not check_arg_count():
