@@ -26,15 +26,28 @@ def check_arg_count() -> bool:
     return True
 
 def check_folder_paths() -> bool:
-    if not os.path.isdir(sys.argv[1]):
-        print("Error: Invalid source directory")
-        return False
-    elif not os.path.isdir(sys.argv[2]):
-        print("Error: Invalid replica directory")
-        return False
-    elif os.path.abspath(sys.argv[1]) == os.path.abspath(sys.argv[2]):
+    if os.path.abspath(sys.argv[1]) == os.path.abspath(sys.argv[2]):
         print("Error: Source and replica directory are the same")
         return False
+    elif os.path.abspath(sys.argv[1]) in  os.path.abspath(sys.argv[2]):
+        print("Error: Replica directory inside Source, infinite loop")
+        return False
+    if not os.path.isdir(sys.argv[1]):
+        path = os.path.split(os.path.abspath(sys.argv[1]))[0]
+        if not os.path.exists(sys.argv[1]) and os.path.isdir(path):
+            print("Log: Creating Source directory")
+            os.mkdir(sys.argv[1])
+        else:
+            print("Error: Invalid Source directory")
+            return False
+    if not os.path.isdir(sys.argv[2]):
+        path = os.path.split(os.path.abspath(sys.argv[2]))[0]
+        if not os.path.exists(sys.argv[2]) and os.path.isdir(path):
+            print("Log: Creating replica directory")
+            os.mkdir(sys.argv[2])
+        else:
+            print("Error: Invalid replica directory")
+            return False
     return True
 
 def check_log_file_path() -> bool:
