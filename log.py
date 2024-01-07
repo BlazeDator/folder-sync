@@ -20,7 +20,7 @@ def prepare_dir_file(arguments: dict[str, str]):
     if not os.path.exists(log_dir):
         try:
             os.mkdir(log_dir)
-            log_operations("Log: Creating dir ", log_dir, arguments)
+            log_operations("Log: Creating dir  ", log_dir, arguments)
         except PermissionError:
             print("Log: No Permissions ", log_dir)
     elif os.path.isfile(log_dir):
@@ -33,7 +33,7 @@ def prepare_dir_file(arguments: dict[str, str]):
         if os.path.isdir(path):
             try:
                 os.rmdir(path)
-                log_operations("Log: Removing dir ", path, arguments)
+                log_operations("Log: Removing dir  ", path, arguments)
             except PermissionError:
                 print("Log: No Permissions ", path)
                 return

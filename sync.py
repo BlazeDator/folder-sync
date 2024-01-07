@@ -45,7 +45,7 @@ def sync_cleanup(replica: str, entries: list, arguments: dict[str, str]):
                     if len(os.listdir(r_entry)) > 0:
                         sync_cleanup(r_entry, [], arguments)
                     os.rmdir(r_entry)
-                    log_operations("Log: Removing dir ", r_entry, arguments)
+                    log_operations("Log: Removing dir  ", r_entry, arguments)
                 except PermissionError:
                     print("Log: No Permissions ", r_entry)
                 
@@ -64,7 +64,7 @@ def sync_file(source: str, replica: str, arguments: dict[str, str]):
     elif os.path.isdir(replica):
         try:
             os.rmdir(replica)
-            log_operations("Log: Removing dir ", replica, arguments)
+            log_operations("Log: Removing dir  ", replica, arguments)
         except PermissionError:
             print("Log: No Permissions ", replica)
             return
@@ -94,7 +94,7 @@ def sync_dir(replica: str, arguments: dict[str, str]):
     elif not os.path.exists(replica):
         try:
             os.mkdir(replica)
-            log_operations("Log: Creating dir ", replica, arguments)
+            log_operations("Log: Creating dir  ", replica, arguments)
         except:
             print("Log: No Permissions ", replica)
             return
@@ -105,5 +105,5 @@ def sync_dir(replica: str, arguments: dict[str, str]):
         except PermissionError:
             print("Log: No Permissions ", replica)
             return
-        log_operations("Log: Creating dir ", replica, arguments)
+        log_operations("Log: Creating dir  ", replica, arguments)
         os.mkdir(replica)
