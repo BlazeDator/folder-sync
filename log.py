@@ -3,10 +3,10 @@ from datetime import datetime
 
 def log_operations(message: str, path: str, arguments: dict[str, str]):
     log_path = os.path.join(arguments["log_dir"], arguments["log_file"])
-    message = message.removeprefix("Log: ")
     date = datetime.now().isoformat(sep=" ", timespec="seconds")
-
     print(message, path)
+    message = message.removeprefix("Log: ")
+    
     prepare_dir_file(arguments)
     if os.path.isfile(log_path):
         with open(log_path, 'a', newline="\n") as file:
@@ -15,7 +15,6 @@ def log_operations(message: str, path: str, arguments: dict[str, str]):
 
 def prepare_dir_file(arguments: dict[str, str]):
     log_dir = arguments["log_dir"]
-    log_file = arguments["log_file"]
     path = os.path.join(arguments["log_dir"], arguments["log_file"])
 
     if not os.path.exists(log_dir):
