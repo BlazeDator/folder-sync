@@ -9,9 +9,12 @@ def log_operations(message: str, path: str, arguments: dict[str, str]):
     
     prepare_dir_file(arguments)
     if os.path.isfile(log_path):
-        with open(log_path, 'a', newline="\n") as file:
-                writer = csv.writer(file)
-                writer.writerow([date, message, path])
+        try:
+            with open(log_path, 'a', newline="\n") as file:
+                    writer = csv.writer(file)
+                    writer.writerow([date, message, path])
+        except PermissionError:
+            print("Log: No Permissions ", log_path)
 
 def prepare_dir_file(arguments: dict[str, str]):
     log_dir = arguments["log_dir"]
