@@ -1,6 +1,6 @@
 import os, shutil, hashlib
 
-# TODO: Write operations to log file
+from log import log_operations
 
 def syncroniser(source: str, arguments: dict[str, str]):
     try:
@@ -10,19 +10,19 @@ def syncroniser(source: str, arguments: dict[str, str]):
         return
     replica = source.replace(arguments["source"], arguments["replica"])
 
-    sync_cleanup(replica, entries)
+    sync_cleanup(replica, entries, arguments)
     for entry in entries:
         entry = os.path.join(source, entry)
         replica = entry.replace(arguments["source"], arguments["replica"])
     
         if os.path.isfile(entry):
-            sync_file(entry, replica)
+            sync_file(entry, replica, arguments)
         elif os.path.isdir(entry):
             next_dir = os.path.join(source, entry)
-            sync_dir(replica)
+            sync_dir(replica, arguments)
             syncroniser(next_dir, arguments)
 
-def sync_cleanup(replica: str, entries: list):
+def sync_cleanup(replica: str, entries: list, arguments: dict[str, str]):
     if not os.path.exists(replica):
         return
     try:
@@ -37,41 +37,41 @@ def sync_cleanup(replica: str, entries: list):
             if os.path.isfile(r_entry):
                 try:
                     os.remove(r_entry)
-                    print("Log: Removing file ", r_entry)
+                    log_operations("Log: Removing file ", r_entry, arguments)
                 except PermissionError:
                     print("Log: No Permissions ", r_entry)
             elif os.path.isdir(r_entry):
                 try:
                     if len(os.listdir(r_entry)) > 0:
-                        sync_cleanup(r_entry, [])
+                        sync_cleanup(r_entry, [], arguments)
                     os.rmdir(r_entry)
-                    print("Log: Removing dir ", r_entry)
+                    log_operations("Log: Removing dir ", r_entry, arguments)
                 except PermissionError:
                     print("Log: No Permissions ", r_entry)
                 
 
-def sync_file(source: str, replica: str):
+def sync_file(source: str, replica: str, arguments: dict[str, str]):
     if not os.path.exists(replica):
         try:
             shutil.copyfile(source, replica)
-            print("Log: Creating file ", replica)
+            log_operations("Log: Creating file ", replica, arguments)
         except PermissionError:
             print("Log: No Permissions ", source)
             return
-    elif os.path.isfile(replica) and files_different(source, replica):
-        print("Log: Updating file ", replica)
+    elif os.path.isfile(replica) and files_different(source, replica, arguments):
+        log_operations("Log: Updating file ", replica, arguments)
         shutil.copyfile(source, replica)
     elif os.path.isdir(replica):
         try:
             os.rmdir(replica)
-            print("Log: Removing dir ", replica)
+            log_operations("Log: Removing dir ", replica, arguments)
         except PermissionError:
             print("Log: No Permissions ", replica)
             return
-        print("Log: Creating file ", replica)
+        log_operations("Log: Creating file ", replica, arguments)
         shutil.copyfile(source, replica)
 
-def files_different(source: str, replica: str) -> bool:
+def files_different(source: str, replica: str, arguments: dict[str, str]) -> bool:
     try:
         with open(source, "rb") as f:
             file_sha = hashlib.file_digest(f, "sha256").hexdigest()
@@ -88,22 +88,22 @@ def files_different(source: str, replica: str) -> bool:
         return True
     return False
 
-def sync_dir(replica: str):
+def sync_dir(replica: str, arguments: dict[str, str]):
     if os.path.isdir(replica):
         return
     elif not os.path.exists(replica):
         try:
             os.mkdir(replica)
-            print("Log: Creating dir ", replica)
+            log_operations("Log: Creating dir ", replica, arguments)
         except:
             print("Log: No Permissions ", replica)
             return
     elif os.path.isfile(replica):
         try:
             os.remove(replica)
-            print("Log: Removing file ", replica)
+            log_operations("Log: Removing file ", replica, arguments)
         except PermissionError:
             print("Log: No Permissions ", replica)
             return
-        print("Log: Creating dir ", replica)
+        log_operations("Log: Creating dir ", replica, arguments)
         os.mkdir(replica)
