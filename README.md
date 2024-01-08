@@ -18,6 +18,10 @@ WSL Ubuntu:
 
     python3 ./main.py "source" "replica" 1 "log/log.csv"
 
+Closing the program:
+
+    ctrl + c
+
 Running unit tests:
 
     pytest tests
