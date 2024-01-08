@@ -23,6 +23,12 @@ def check_arg_count() -> bool:
 <Sync interval (seconds)> \
 <Log file path>")
         return False
+    elif (len(sys.argv[1].strip()) < 1):
+        return False
+    elif (len(sys.argv[2].strip()) < 1):
+        return False
+    elif (len(sys.argv[4].strip()) < 1):
+        return False
     return True
 
 def check_folder_paths() -> bool:
@@ -65,8 +71,12 @@ def check_log_file_path() -> bool:
     if not os.path.isdir(folder):
         path = os.path.split(os.path.abspath(folder))[0]
         if not os.path.exists(folder) and os.path.isdir(path):
-            print("Log: Creating Log directory")
-            os.mkdir(folder)
+            try:
+                os.mkdir(folder)
+                print("Log: Creating Log directory")
+            except:
+                print("Error: Invalid Log directory")
+                return False
         else:
             print("Error: Invalid Log directory")
             return False
