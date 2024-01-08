@@ -1,6 +1,7 @@
-import os, shutil, hashlib
+import os, shutil
 
 from log import log_operations
+from files_hash import files_different
 
 def syncroniser(source: str, arguments: dict[str, str]):
     try:
@@ -52,7 +53,6 @@ def sync_cleanup(replica: str, entries: list, arguments: dict[str, str]):
                 else:
                     log_operations("Log: Removing dir  ", r_entry, arguments)
                 
-
 def sync_file(source: str, replica: str, arguments: dict[str, str]):
     if not os.path.exists(replica):
         try:
@@ -62,7 +62,7 @@ def sync_file(source: str, replica: str, arguments: dict[str, str]):
             return
         else:
             log_operations("Log: Creating file ", replica, arguments)
-    elif os.path.isfile(replica) and files_different(source, replica, arguments):
+    elif os.path.isfile(replica) and files_different(source, replica):
         log_operations("Log: Updating file ", replica, arguments)
         shutil.copyfile(source, replica)
     elif os.path.isdir(replica):
@@ -75,23 +75,6 @@ def sync_file(source: str, replica: str, arguments: dict[str, str]):
             log_operations("Log: Removing dir  ", replica, arguments)
         log_operations("Log: Creating file ", replica, arguments)
         shutil.copyfile(source, replica)
-
-def files_different(source: str, replica: str, arguments: dict[str, str]) -> bool:
-    try:
-        with open(source, "rb") as f:
-            file_sha = hashlib.file_digest(f, "sha256").hexdigest()
-    except PermissionError:
-        print("Log: No Permissions ", source)
-        return False
-    try:
-        with open(replica, "rb") as f:
-            replica_sha = hashlib.file_digest(f, "sha256").hexdigest()
-    except PermissionError:
-        print("Log: No Permissions ", replica)
-        return False
-    if file_sha != replica_sha:
-        return True
-    return False
 
 def sync_dir(replica: str, arguments: dict[str, str]):
     if os.path.isdir(replica):
