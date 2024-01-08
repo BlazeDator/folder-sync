@@ -35,16 +35,24 @@ def check_folder_paths() -> bool:
     if not os.path.isdir(sys.argv[1]):
         path = os.path.split(os.path.abspath(sys.argv[1]))[0]
         if not os.path.exists(sys.argv[1]) and os.path.isdir(path):
-            print("Log: Creating source directory")
-            os.mkdir(sys.argv[1])
+            try:
+                os.mkdir(sys.argv[1])
+                print("Log: Creating source directory")
+            except:
+                print("Error: Invalid replica directory")
+                return False
         else:
             print("Error: Invalid source directory")
             return False
     if not os.path.isdir(sys.argv[2]):
         path = os.path.split(os.path.abspath(sys.argv[2]))[0]
         if not os.path.exists(sys.argv[2]) and os.path.isdir(path):
-            print("Log: Creating replica directory")
-            os.mkdir(sys.argv[2])
+            try:
+                os.mkdir(sys.argv[2])
+                print("Log: Creating replica directory")
+            except:
+                print("Error: Invalid replica directory")
+                return False  
         else:
             print("Error: Invalid replica directory")
             return False
