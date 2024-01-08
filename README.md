@@ -5,10 +5,10 @@
 
 Arguments:
 
-    Source folder - The folder we'll be syncronising in replica
-    Replica folder - An exact copy of the source folder
-    Sync time - The ammount of seconds between each syncronisation
-    Log file path - The path of a csv file where all operations will be logged
+- Source folder - The folder we'll be syncronising in replica
+- Replica folder - An exact copy of the source folder
+- Sync time - The ammount of seconds between each syncronisation
+- Log file path - The path of a csv file where all operations will be logged
 
 Windows:
 
@@ -17,9 +17,6 @@ Windows:
 WSL Ubuntu:
 
     python3 ./main.py "source" "replica" 1 "log/log.csv"
-
-
-
 
 <h2>Goals:</h2>
 
