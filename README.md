@@ -18,11 +18,11 @@ WSL Ubuntu:
 
     python3 ./main.py "source" "replica" 1 "log/log.csv"
 
-<h2>Goals:</h2>
-
 Running unit tests:
 
     pytest tests
+
+<h2>Goals:</h2>
 
 - Accept command-line arguments:
 
