@@ -1,4 +1,5 @@
 import signal
+import time
 from datetime import datetime
 
 from helpers import check_python_version
@@ -32,7 +33,7 @@ def main():
         if (diff_time.seconds >= synctime):
             past = present
             syncroniser(arguments["source"], arguments)
-
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
