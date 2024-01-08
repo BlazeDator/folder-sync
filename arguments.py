@@ -24,10 +24,13 @@ def check_arg_count() -> bool:
 <Log file path>")
         return False
     elif (len(sys.argv[1].strip()) < 1):
+        print("Error: Invalid source directory")
         return False
     elif (len(sys.argv[2].strip()) < 1):
+        print("Error: Invalid replica directory")
         return False
     elif (len(sys.argv[4].strip()) < 1):
+        print("Error: Invalid log argument")
         return False
     return True
 
@@ -68,7 +71,7 @@ def check_log_file_path() -> bool:
     folder = os.path.split(sys.argv[4])[0]
     file = os.path.split(sys.argv[4])[1]
 
-    if not os.path.isdir(folder):
+    if not os.path.isdir(folder) and len(os.path.split(folder)[0]) > 0:
         path = os.path.split(os.path.abspath(folder))[0]
         if not os.path.exists(folder) and os.path.isdir(path):
             try:
