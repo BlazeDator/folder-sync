@@ -76,7 +76,7 @@ def test_check_folder_paths():
     test_args = ["main.py", "source", "source" + os.path.sep + "replica" , "1" , log]
     with patch.object(sys, 'argv', test_args):
         assert check_folder_paths() == False
-    test_args = ["main.py", " ", "replica", "1" , log]
+    test_args = ["main.py", "", "replica", "1" , log]
     with patch.object(sys, 'argv', test_args):
         assert check_folder_paths() == False
     test_args = ["main.py", "source", "", "1" , log]
@@ -84,10 +84,47 @@ def test_check_folder_paths():
         assert check_folder_paths() == False
 
 def test_check_log_file_path():
-    pass
+    test_args = ["main.py", "source", "replica", "1" , log]
+    with patch.object(sys, 'argv', test_args):
+        assert check_log_file_path() == True
+    test_args = ["main.py", "source", "replica", "1" , "log.csv"]
+    with patch.object(sys, 'argv', test_args):
+        assert check_log_file_path() == True
+    test_args = ["main.py", "source", "replica", "1" , log_txt]
+    with patch.object(sys, 'argv', test_args):
+        assert check_log_file_path() == False
+
 
 def test_check_sync_time():
-    pass
+    test_args = ["main.py", "source", "replica", "1" , log]
+    with patch.object(sys, 'argv', test_args):
+        assert check_sync_time() == True
+    test_args = ["main.py", "source", "replica", "a" , log]
+    with patch.object(sys, 'argv', test_args):
+        assert check_sync_time() == False
+    test_args = ["main.py", "source", "replica", "" , log]
+    with patch.object(sys, 'argv', test_args):
+        assert check_sync_time() == False
+    test_args = ["main.py", "source", "replica", " " , log]
+    with patch.object(sys, 'argv', test_args):
+        assert check_sync_time() == False
+    test_args = ["main.py", "source", "replica", "+-2" , log]
+    with patch.object(sys, 'argv', test_args):
+        assert check_sync_time() == False
+    test_args = ["main.py", "source", "replica", "+2" , log]
+    with patch.object(sys, 'argv', test_args):
+        assert check_sync_time() == False
+    test_args = ["main.py", "source", "replica", "2.5" , log]
+    with patch.object(sys, 'argv', test_args):
+        assert check_sync_time() == False
 
 def test_args_to_dict():
-    pass
+    test_args = ["main.py", "source", "replica", "1" , log]
+    with patch.object(sys, 'argv', test_args):
+        assert args_to_dict() == { \
+                                        "source" : os.path.abspath(test_args[1]), \
+                                        "replica" : os.path.abspath(test_args[2]), \
+                                        "sync" : test_args[3], \
+                                        "log_dir" : os.path.abspath(os.path.split(sys.argv[4])[0]), \
+                                        "log_file" : os.path.split(sys.argv[4])[1]
+                                    }
