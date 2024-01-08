@@ -20,6 +20,10 @@ WSL Ubuntu:
 
 <h2>Goals:</h2>
 
+Running unit tests:
+
+    pytest tests
+
 - Accept command-line arguments:
 
     1. source folder path
