@@ -1,11 +1,11 @@
 import os, csv
 from datetime import datetime
 
-def log_operations(message: str, path: str, arguments: dict[str, str]):
+def log_operations(message, path, arguments):
     log_path = os.path.join(arguments["log_dir"], arguments["log_file"])
     date = datetime.now().isoformat(sep=" ", timespec="seconds")
     print(message, path)
-    message = message.removeprefix("Log: ")
+    message = message.split("Log: ")[1]
     
     prepare_dir_file(arguments)
     if os.path.isfile(log_path):
@@ -16,7 +16,7 @@ def log_operations(message: str, path: str, arguments: dict[str, str]):
         except PermissionError:
             print("Log: No Permissions ", log_path)
 
-def prepare_dir_file(arguments: dict[str, str]):
+def prepare_dir_file(arguments):
     log_dir = arguments["log_dir"]
     path = os.path.join(arguments["log_dir"], arguments["log_file"])
 

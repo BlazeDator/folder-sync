@@ -1,7 +1,6 @@
 import sys, os
 
-def check_arguments() -> dict[str, str]:
-    arguments: dict[str, str]
+def check_arguments():
 
     if not check_arg_count():
         return {}
@@ -14,7 +13,7 @@ def check_arguments() -> dict[str, str]:
     arguments = args_to_dict()
     return arguments
 
-def check_arg_count() -> bool:
+def check_arg_count():
     if len(sys.argv) != 5:
         print("Error: Wrong number of arguments")
         print("Usage: python main.py \
@@ -34,7 +33,7 @@ def check_arg_count() -> bool:
         return False
     return True
 
-def check_folder_paths() -> bool:
+def check_folder_paths():
     if os.path.abspath(sys.argv[1]) == os.path.abspath(sys.argv[2]):
         print("Error: Source and replica directory are the same")
         return False
@@ -67,7 +66,7 @@ def check_folder_paths() -> bool:
             return False
     return True
 
-def check_log_file_path() -> bool:
+def check_log_file_path():
     folder = os.path.split(sys.argv[4])[0]
     file = os.path.split(sys.argv[4])[1]
 
@@ -90,13 +89,13 @@ def check_log_file_path() -> bool:
         print("Log: Log file not found, a new one will be created")
     return True
 
-def check_sync_time() -> bool:
+def check_sync_time():
     if not sys.argv[3].isnumeric() or not int(sys.argv[3]) > 0:
         print("Error: Sync time isnt an integer > 0")
         return False
     return True
 
-def args_to_dict() -> dict:
+def args_to_dict():
     arguments = {}
     arguments["source"] = os.path.abspath(sys.argv[1])
     arguments["replica"] = os.path.abspath(sys.argv[2])

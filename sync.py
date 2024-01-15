@@ -3,9 +3,9 @@ import os, shutil
 from log import log_operations
 from files_hash import files_different
 
-def syncroniser(source: str, arguments: dict[str, str]):
+def syncroniser(source, arguments):
     try:
-        entries: list = os.listdir(source)
+        entries = os.listdir(source)
     except PermissionError:
         print("Log: No Permissions ", source)
         return
@@ -23,11 +23,11 @@ def syncroniser(source: str, arguments: dict[str, str]):
             sync_dir(replica, arguments)
             syncroniser(next_dir, arguments)
 
-def sync_cleanup(replica: str, entries: list, arguments: dict[str, str]):
+def sync_cleanup(replica, entries, arguments):
     if not os.path.exists(replica):
         return
     try:
-        replica_entries: list = os.listdir(replica)
+        replica_entries = os.listdir(replica)
     except PermissionError:
         print("Log: No Permissions ", replica)
         return
@@ -53,7 +53,7 @@ def sync_cleanup(replica: str, entries: list, arguments: dict[str, str]):
                 else:
                     log_operations("Log: Removing dir  ", r_entry, arguments)
                 
-def sync_file(source: str, replica: str, arguments: dict[str, str]):
+def sync_file(source, replica, arguments):
     if not os.path.exists(replica):
         try:
             shutil.copyfile(source, replica)
@@ -76,7 +76,7 @@ def sync_file(source: str, replica: str, arguments: dict[str, str]):
         log_operations("Log: Creating file ", replica, arguments)
         shutil.copyfile(source, replica)
 
-def sync_dir(replica: str, arguments: dict[str, str]):
+def sync_dir(replica, arguments):
     if os.path.isdir(replica):
         return
     elif not os.path.exists(replica):

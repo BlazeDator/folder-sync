@@ -1,6 +1,6 @@
 import hashlib
 
-def files_different(source: str, replica: str) -> bool:
+def files_different(source, replica):
     try:
         with open(source, "rb") as f:
             file_sha = hashlib.file_digest(f, "sha256").hexdigest()
@@ -19,10 +19,10 @@ def files_different(source: str, replica: str) -> bool:
         return True
     return False
 
-def files_different_alternative(source: str, replica: str) -> bool:    
+def files_different_alternative(source, replica):    
     file_sha = hashlib.sha256()
     replica_sha = hashlib.sha256()
-    chunk: bytes = bytes()
+    chunk = bytes()
 
     try:
         with open(source,'rb') as f:
